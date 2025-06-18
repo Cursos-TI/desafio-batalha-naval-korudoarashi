@@ -4,37 +4,107 @@
 // Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
 // Siga os comentários para implementar cada parte do desafio.
 
+#define ROWS 10
+#define COLS 10
+
+void clearBoard(int board[ROWS][COLS]) {
+    for(int i = 0; i < ROWS; i++)
+        for(int j = 0; j < COLS; j++)
+            board[i][j] = 0;
+
+}
+
+void cross(int x, int y, int board[ROWS][COLS]) {
+    clearBoard(board);
+
+    for(int i = 0; i < ROWS; i++)
+        board[i][x] = 1;
+
+    for(int j = 0; j < COLS; j++)
+        board[y][j] = 1;
+}
+
+void cone(int x, int y, int board[ROWS][COLS]) {
+    clearBoard(board);
+
+    if (y + 2 < ROWS) {
+        board[y][x] = 1;
+        if (x - 1 >= 0 && x + 1 < COLS) {
+            board[y + 1][x - 1] = 1;
+            board[y + 1][x] = 1;
+            board[y + 1][x + 1] = 1;
+        }
+        if (x - 2 >= 0 && x + 2 < COLS) {
+            for (int j = x - 2; j <= x + 2; j++) {
+                board[y + 2][j] = 1;
+            }
+        }
+    }
+}
+
+void octahedron(int x, int y, int board[ROWS][COLS]) {
+    clearBoard(board);
+
+    if (y - 1 >= 0 && y + 1 < ROWS && x - 1 >= 0 && x + 1 < COLS) {
+        board[y - 1][x] = 1;
+        board[y][x - 1] = 1;
+        board[y][x] = 1;
+        board[y][x + 1] = 1;
+        board[y + 1][x] = 1;
+    }
+}
+
+void showBoard(int board[ROWS][COLS]) {
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            printf("%d ", board[i][j] == 1 ? 3 : 0);
+        }
+        printf("\n");
+    }
+}
+
 int main() {
-    // Nível Novato - Posicionamento dos Navios
-    // Sugestão: Declare uma matriz bidimensional para representar o tabuleiro (Ex: int tabuleiro[5][5];).
-    // Sugestão: Posicione dois navios no tabuleiro, um verticalmente e outro horizontalmente.
-    // Sugestão: Utilize `printf` para exibir as coordenadas de cada parte dos navios.
+    // Criando tabuleiro usando uma matriz bidimensional
+    int board[ROWS][COLS] = {0};
 
-    // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
-    // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
-    // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
-    // Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
+    // Posicionando primeiro navio
+    for(int i = 2; i < 5; i++) {
+        board[i][1] = 1;
+    }
 
-    // Nível Mestre - Habilidades Especiais com Matrizes
-    // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
-    // Sugestão: Utilize estruturas de repetição aninhadas para preencher as áreas afetadas por essas habilidades no tabuleiro.
-    // Sugestão: Exiba o tabuleiro com as áreas afetadas, utilizando 0 para áreas não afetadas e 1 para áreas atingidas.
+    // Posicionando segundo navio
+    for (int i = 4; i < 8; i++) {
+        board[4][i] = 1;
+    }
 
-    // Exemplos de exibição das habilidades:
-    // Exemplo para habilidade em cone:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 1 1 1 1 1
-    
-    // Exemplo para habilidade em octaedro:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 0 0 1 0 0
+    // Posicionando terceiro navio
+    for (int i = 7; i < 10; i++) {
+        board[i][i] = 1;
+    }
 
-    // Exemplo para habilidade em cruz:
-    // 0 0 1 0 0
-    // 1 1 1 1 1
-    // 0 0 1 0 0
+    // Posicionando quarto navio
+    for (int i = 0; i < 3; i++) {
+        board[7 + i][3 - i] = 1;
+    }
+
+    // Exibindo tabuleiro
+    printf("\nTabuleiro:\n");
+    showBoard(board);
+
+    // Exibindo Cruz
+    printf("\nCruz:\n");
+    cross(2, 2, board);
+    showBoard(board);
+
+    // Exibindo Cone
+    printf("\nCone:\n");
+    cone(2, 2, board);
+    showBoard(board);
+
+    // Exibindo Octaedro
+    printf("\nOctaedro:\n");
+    octahedron(2, 2, board);
+    showBoard(board);
 
     return 0;
 }
